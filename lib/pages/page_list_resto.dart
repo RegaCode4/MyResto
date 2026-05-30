@@ -1,10 +1,9 @@
 // lib/pages/page_list_resto.dart
 
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import '../helper/session_manager.dart';
 import '../models/resto.dart';
 import '../services/api_service.dart';
-import '../services/session_service.dart';
 import 'page_login.dart';
 import 'page_form_resto.dart';
 import 'page_detail_map.dart';
@@ -68,19 +67,19 @@ class _PageListRestoState extends State<PageListResto> {
 
     if (confirm == true) {
       final res = await ApiService.deleteResto(resto.id);
-      _showSnack(res['message'] ?? '');
+      _showSnackBar(res['message'] ?? '');
       _loadData();
     }
   }
 
-  void _showSnack(String msg) {
+  void _showSnackBar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(msg)),
     );
   }
 
   Future<void> _logout() async {
-    await SessionService.clearSession();
+    await SessionManager.logout();
     if (mounted) {
       Navigator.pushReplacement(
         context,
@@ -92,7 +91,7 @@ class _PageListRestoState extends State<PageListResto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(kBgColor),
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text('Rekomendasi Resto Saya'),
         actions: [
@@ -171,14 +170,12 @@ class _PageListRestoState extends State<PageListResto> {
                     itemCount: filtered.length,
                     itemBuilder: (_, i) => _RestoCard(
                       resto: filtered[i],
-                      // Tap card → buka peta
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PageDetailMap(resto: filtered[i]),
                         ),
                       ),
-                      // Tombol edit → buka form edit
                       onEdit: () async {
                         await Navigator.push(
                           context,
@@ -191,7 +188,6 @@ class _PageListRestoState extends State<PageListResto> {
                         );
                         _loadData();
                       },
-                      // Tombol hapus
                       onDelete: () => _confirmDelete(filtered[i]),
                     ),
                   ),
@@ -227,7 +223,6 @@ class _RestoCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: InkWell(
-        // Tap seluruh card → buka peta
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -241,7 +236,7 @@ class _RestoCard extends StatelessWidget {
                 child: Container(
                   width: 60,
                   height: 60,
-                  color: Color(kSecondaryColor),
+                  color: const Color(0xFFFF8A65),
                   child: const Icon(Icons.restaurant,
                       color: Colors.white, size: 32),
                 ),
@@ -263,8 +258,8 @@ class _RestoCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       resto.jenisKuliner,
-                      style:
-                          TextStyle(color: Color(kPrimaryColor), fontSize: 12),
+                      style: TextStyle(
+                          color: const Color(0xFFE65100), fontSize: 12),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -324,7 +319,6 @@ class _ActionBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Hentikan tap agar tidak trigger InkWell card di atasnya
       onTap: onTap,
       child: Column(
         children: [

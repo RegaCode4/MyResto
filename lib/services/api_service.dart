@@ -2,10 +2,11 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../constants.dart';
 import '../models/resto.dart';
 
 class ApiService {
+  static const String baseUrl = 'http://10.135.237.156/resto_api';
+
   // ── Auth ──────────────────────────────────────────────────────────────────
 
   static Future<Map<String, dynamic>> register({
@@ -18,7 +19,7 @@ class ApiService {
       Uri.parse('$baseUrl/register.php'),
       body: {
         'username': username,
-        'email':    email,
+        'email': email,
         'password': password,
         'fullname': fullname,
       },
@@ -55,7 +56,7 @@ class ApiService {
   }
 
   static Future<Map<String, dynamic>> insertResto({
-    required int    userId,
+    required int userId,
     required String namaResto,
     required String jenisKuliner,
     required String reviewSingkat,
@@ -65,19 +66,19 @@ class ApiService {
     final res = await http.post(
       Uri.parse('$baseUrl/insert_resto.php'),
       body: {
-        'user_id':        userId.toString(),
-        'nama_resto':     namaResto,
-        'jenis_kuliner':  jenisKuliner,
+        'user_id': userId.toString(),
+        'nama_resto': namaResto,
+        'jenis_kuliner': jenisKuliner,
         'review_singkat': reviewSingkat,
-        'latitude':       latitude.toString(),
-        'longitude':      longitude.toString(),
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
       },
     );
     return jsonDecode(res.body);
   }
 
   static Future<Map<String, dynamic>> updateResto({
-    required int    id,
+    required int id,
     required String namaResto,
     required String jenisKuliner,
     required String reviewSingkat,
@@ -87,12 +88,12 @@ class ApiService {
     final res = await http.post(
       Uri.parse('$baseUrl/update_resto.php'),
       body: {
-        'id':             id.toString(),
-        'nama_resto':     namaResto,
-        'jenis_kuliner':  jenisKuliner,
+        'id': id.toString(),
+        'nama_resto': namaResto,
+        'jenis_kuliner': jenisKuliner,
         'review_singkat': reviewSingkat,
-        'latitude':       latitude.toString(),
-        'longitude':      longitude.toString(),
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
       },
     );
     return jsonDecode(res.body);

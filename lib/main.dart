@@ -1,8 +1,7 @@
 // lib/main.dart
 
 import 'package:flutter/material.dart';
-import 'constants.dart';
-import 'services/session_service.dart';
+import 'helper/session_manager.dart';
 import 'pages/page_login.dart';
 import 'pages/page_list_resto.dart';
 
@@ -20,16 +19,16 @@ class RestoTrackerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(kPrimaryColor),
-          primary:   Color(kPrimaryColor),
+          seedColor: const Color(0xFFE65100),
+          primary: const Color(0xFFE65100),
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Color(kPrimaryColor),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFE65100),
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Color(kPrimaryColor),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFE65100),
           foregroundColor: Colors.white,
         ),
         useMaterial3: true,
@@ -45,8 +44,8 @@ class SplashRouter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>?>(
-      future: SessionService.getSession(),
+    return FutureBuilder<bool>(
+      future: SessionManager.isLogin(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -55,11 +54,24 @@ class SplashRouter extends StatelessWidget {
         }
 
         // Sesi aktif → langsung ke Dashboard
-        if (snapshot.hasData && snapshot.data != null) {
-          final session = snapshot.data!;
-          return PageListResto(
-            userId:   session['id'],
-            fullname: session['fullname'],
+        if (snapshot.data == true) {
+          return FutureBuilder<Map<String, String?>>(
+            future: SessionManager.getUserSession(),
+            builder: (context, sessionSnap) {
+              if (sessionSnap.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              final session = sessionSnap.data;
+              if (session != null) {
+                return PageListResto(
+                  userId: int.tryParse(session['id'] ?? '0') ?? 0,
+                  fullname: session['fullname'] ?? '',
+                );
+              }
+              return const PageLogin();
+            },
           );
         }
 

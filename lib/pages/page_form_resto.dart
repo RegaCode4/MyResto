@@ -1,7 +1,6 @@
 // lib/pages/page_form_resto.dart
 
 import 'package:flutter/material.dart';
-import '../constants.dart';
 import '../models/resto.dart';
 import '../services/api_service.dart';
 
@@ -109,7 +108,7 @@ class _PageFormRestoState extends State<PageFormResto> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEdit ? 'Edit Restoran' : 'Tambah Restoran'),
-        backgroundColor: Color(kPrimaryColor),
+        backgroundColor: const Color(0xFFE65100),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -175,7 +174,7 @@ class _PageFormRestoState extends State<PageFormResto> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(kPrimaryColor),
+                  backgroundColor: const Color(0xFFE65100),
                   foregroundColor: Colors.white,
                 ),
                 onPressed: _submit,

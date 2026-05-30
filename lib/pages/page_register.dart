@@ -1,7 +1,6 @@
 // lib/pages/page_register.dart
 
 import 'package:flutter/material.dart';
-import '../constants.dart';
 import '../services/api_service.dart';
 import 'page_login.dart';
 
@@ -71,7 +70,7 @@ class _PageRegisterState extends State<PageRegister> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
-        backgroundColor: Color(kPrimaryColor),
+        backgroundColor: const Color(0xFFE65100),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -122,7 +121,7 @@ class _PageRegisterState extends State<PageRegister> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(kPrimaryColor),
+                  backgroundColor: const Color(0xFFE65100),
                   foregroundColor: Colors.white,
                 ),
                 onPressed: register,

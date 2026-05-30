@@ -1,9 +1,8 @@
 // lib/pages/page_login.dart
 
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import '../helper/session_manager.dart';
 import '../services/api_service.dart';
-import '../services/session_service.dart';
 import 'page_register.dart';
 import 'page_list_resto.dart';
 
@@ -45,20 +44,14 @@ class _PageLoginState extends State<PageLogin> {
 
       if (res['is_success'] == true) {
         _showSnackBar('Berhasil login');
-        final user = res['data'];
-        await SessionService.saveSession(
-          id: user['id'] is int ? user['id'] : int.parse(user['id'].toString()),
-          username: user['username'],
-          fullname: user['fullname'],
-        );
+        await SessionManager.saveUserSession(res['data']);
         if (mounted) {
+          final user = res['data'];
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (_) => PageListResto(
-                userId: user['id'] is int
-                    ? user['id']
-                    : int.parse(user['id'].toString()),
+                userId: int.parse(user['id'].toString()),
                 fullname: user['fullname'],
               ),
             ),
@@ -77,7 +70,7 @@ class _PageLoginState extends State<PageLogin> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        backgroundColor: Color(kPrimaryColor),
+        backgroundColor: const Color(0xFFE65100),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -107,7 +100,7 @@ class _PageLoginState extends State<PageLogin> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(kPrimaryColor),
+                  backgroundColor: const Color(0xFFE65100),
                   foregroundColor: Colors.white,
                 ),
                 onPressed: login,
